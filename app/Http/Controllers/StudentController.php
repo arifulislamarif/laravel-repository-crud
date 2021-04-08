@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Repositories\StudentInterface;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    protected $student;
+
+    public function __construct(StudentInterface $student)
+    {
+        $this->student = $student;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = $this->student->all();
+
         return view('student.index', compact('students'));
     }
 
@@ -36,7 +45,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        Student::create($request->all());
+        $this->student->store($request->all());
 
         session()->flash('success', 'Student Add');
         return back();
@@ -73,7 +82,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        $student->update($request->all());
+        $this->student->update($request->all(), $student);
 
         session()->flash('success', 'Student Update');
         return redirect(route('student.index'));
@@ -87,7 +96,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        $student->delete();
+        $this->student->delete($student);
 
         session()->flash('success', 'Student Delete');
         return redirect(route('student.index'));
