@@ -12,7 +12,7 @@
 
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <a href="{{ route('student.index') }}" class="btn btn-primary mr-1">Student</a>
-        <a href="{{ route('student.index') }}" class="btn btn-primary ml-1">Doctor</a>
+        <a href="{{ route('doctor.index') }}" class="btn btn-primary ml-1">Doctor</a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
