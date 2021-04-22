@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Repositories\Doctor\DoctorInterface;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
+    protected $doctor;
+
+    public function __construct(DoctorInterface $doctor)
+    {
+        $this->doctor = $doctor;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        $doctors = Doctor::all();
+        $doctors = $this->doctor->all();
         return view('doctor.index', compact('doctors'));
     }
 
@@ -36,7 +44,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        Doctor::create($request->all());
+        $this->doctor->store($request->all());
 
         session()->flash('success', 'Doctor Add');
         return back();
@@ -73,9 +81,9 @@ class DoctorController extends Controller
      */
     public function update(Request $request, Doctor $doctor)
     {
-        $doctor->update($request->all());
+        $this->doctor->update($request->all(), $doctor);
 
-        session()->flash('success', 'Doctor Delete');
+        session()->flash('success', 'Doctor Update');
         return redirect(route('doctor.index'));
     }
 
@@ -87,7 +95,7 @@ class DoctorController extends Controller
      */
     public function destroy(Doctor $doctor)
     {
-        $doctor->delete();
+        $this->doctor->delete($doctor);
 
         session()->flash('success', 'Doctor Delete');
         return redirect(route('doctor.index'));
